@@ -1,4 +1,5 @@
-Healthcare Premium Prediction
+###Healthcare Premium Prediction
+
 This project aims to predict healthcare insurance premiums using Machine Learning techniques. By analyzing various factors such as age, BMI, smoking status, and region, the model provides insights into how these variables affect insurance costs.
 
 🔹 Features
