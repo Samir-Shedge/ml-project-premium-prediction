@@ -9,17 +9,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS with vibrant but professional color scheme
+# Custom CSS that adapts to dark/light mode
 st.markdown("""
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
             --accent: #4895ef;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4cc9f0;
-            --warning: #f72585;
+            --text: var(--text-color);
+        }
+        
+        [data-testid="stAppViewContainer"] {
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
         
         .header {
@@ -29,7 +31,7 @@ st.markdown("""
         }
         
         .section-header {
-            color: var(--secondary);
+            color: var(--primary);
             background-color: rgba(67, 97, 238, 0.1);
             padding: 0.5rem;
             border-radius: 8px;
@@ -37,7 +39,7 @@ st.markdown("""
         }
         
         .prediction-box {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: var(--secondary-background-color);
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
@@ -47,7 +49,7 @@ st.markdown("""
         
         .stButton>button {
             background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
+            color: white !important;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
@@ -63,49 +65,45 @@ st.markdown("""
         
         .stNumberInput, .stSelectbox {
             border-radius: 8px;
-            border: 1px solid #ced4da;
-        }
-        
-        .stNumberInput>div>div>input, .stSelectbox>div>div>select {
-            background-color: var(--light);
-        }
-        
-        .st-bb {
-            background-color: var(--light);
-        }
-        
-        .st-emotion-cache-1qg05tj {
-            padding: 1rem;
-        }
-        
-        .sidebar .sidebar-content {
-            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        
-        .success-message {
-            color: #2a9d8f;
-            font-weight: 600;
         }
         
         .info-box {
-            background-color: #e9f5ff;
+            background-color: var(--secondary-background-color);
             border-left: 4px solid var(--accent);
             padding: 1rem;
             border-radius: 0 8px 8px 0;
             margin: 1rem 0;
         }
+        
+        /* Dark mode specific adjustments */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #4895ef;
+                --secondary: #4361ee;
+                --accent: #4cc9f0;
+            }
+            
+            .section-header {
+                background-color: rgba(72, 149, 239, 0.2);
+            }
+            
+            .prediction-box {
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }
+            
+            .stButton>button:hover {
+                box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
 
-# Title and Subtitle with gradient text
+# Title and Subtitle
 st.markdown("""
-    <h1 class="header" style="background: linear-gradient(45deg, #4361ee, #3a0ca3);
-                              -webkit-background-clip: text;
-                              -webkit-text-fill-color: transparent;
-                              margin-bottom: 0.5rem;">
-        � Health Insurance Cost Predictor
+    <h1 class="header">
+        🏥 Health Insurance Cost Predictor
     </h1>
-    <p style="color: #6c757d; font-size: 1.1rem;">
+    <p style="color: var(--text-color); font-size: 1.1rem;">
         Get an instant estimate of your health insurance premium based on your profile
     </p>
 """, unsafe_allow_html=True)
@@ -118,8 +116,7 @@ with st.form("insurance_form"):
     st.markdown('<h3 class="section-header">👤 Personal Information</h3>', unsafe_allow_html=True)
     col1, col2, col3 = st.columns(3)
     with col1:
-        age = st.number_input('Age', min_value=18, max_value=100, step=1, 
-                            help="Enter your current age")
+        age = st.number_input('Age', min_value=18, max_value=100, step=1)
     with col2:
         gender = st.selectbox('Gender', ['Male', 'Female'])
     with col3:
@@ -129,27 +126,21 @@ with st.form("insurance_form"):
     st.markdown('<h3 class="section-header">💼 Employment & Finances</h3>', unsafe_allow_html=True)
     col4, col5, col6 = st.columns(3)
     with col4:
-        income_lakhs = st.number_input('Annual Income (₹ Lakhs)', min_value=0, max_value=200, step=1,
-                                     help="Your yearly income in lakhs")
+        income_lakhs = st.number_input('Annual Income (₹ Lakhs)', min_value=0, max_value=200, step=1)
     with col5:
-        employment_status = st.selectbox('Employment Status', ['Salaried', 'Self-Employed', 'Freelancer', ''],
-                                      help="Select your current employment type")
+        employment_status = st.selectbox('Employment Status', ['Salaried', 'Self-Employed', 'Freelancer', ''])
     with col6:
-        number_of_dependants = st.number_input('Number of Dependents', min_value=0, max_value=20, step=1,
-                                             help="Number of family members to be covered")
+        number_of_dependants = st.number_input('Number of Dependents', min_value=0, max_value=20, step=1)
 
     # Health and Lifestyle Section
     st.markdown('<h3 class="section-header">🏃 Health & Lifestyle</h3>', unsafe_allow_html=True)
     col7, col8, col9 = st.columns(3)
     with col7:
-        bmi_category = st.selectbox('BMI Category', ['Normal', 'Obesity', 'Overweight', 'Underweight'],
-                                  help="Select your body mass index category")
+        bmi_category = st.selectbox('BMI Category', ['Normal', 'Obesity', 'Overweight', 'Underweight'])
     with col8:
-        smoking_status = st.selectbox('Smoking Status', ['No Smoking', 'Regular', 'Occasional'],
-                                   help="Select your smoking habits")
+        smoking_status = st.selectbox('Smoking Status', ['No Smoking', 'Regular', 'Occasional'])
     with col9:
-        genetical_risk = st.number_input('Genetic Risk Score (0-5)', min_value=0, max_value=5, step=1,
-                                       help="0=Low risk, 5=High risk")
+        genetical_risk = st.number_input('Genetic Risk Score (0-5)', min_value=0, max_value=5, step=1)
 
     # Medical and Insurance Details Section
     st.markdown('<h3 class="section-header">🏥 Medical & Coverage</h3>', unsafe_allow_html=True)
@@ -159,17 +150,14 @@ with st.form("insurance_form"):
             'Medical History',
             ['No Disease', 'Diabetes', 'High blood pressure', 'Diabetes & High blood pressure',
              'Thyroid', 'Heart disease', 'High blood pressure & Heart disease',
-             'Diabetes & Thyroid', 'Diabetes & Heart disease'],
-            help="Select any pre-existing conditions"
+             'Diabetes & Thyroid', 'Diabetes & Heart disease']
         )
     with col11:
-        insurance_plan = st.selectbox('Insurance Plan', ['Bronze', 'Silver', 'Gold'],
-                                   help="Select your preferred coverage level")
+        insurance_plan = st.selectbox('Insurance Plan', ['Bronze', 'Silver', 'Gold'])
     with col12:
-        region = st.selectbox('Region', ['Northwest', 'Southeast', 'Northeast', 'Southwest'],
-                            help="Select your residential region")
+        region = st.selectbox('Region', ['Northwest', 'Southeast', 'Northeast', 'Southwest'])
 
-    # Submit button with animation
+    # Submit button
     submitted = st.form_submit_button("🚀 Calculate My Premium")
 
 # Prediction results
@@ -192,15 +180,14 @@ if submitted:
     with st.spinner('Crunching numbers for your personalized estimate...'):
         prediction = predict(input_dict)
     
-    # Enhanced prediction display with animation
-    st.balloons()
-    st.markdown("""
+    # Prediction display
+    st.markdown(f"""
         <div class="prediction-box">
-            <h3 style="color: #3a0ca3; margin-bottom: 0.5rem;">Your Estimated Annual Premium</h3>
-            <h1 style="color: #4361ee; margin-top: 0;">₹ {0:,.2f}</h1>
-            <p style="color: #6c757d;">Based on the information you provided</p>
+            <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Your Estimated Annual Premium</h3>
+            <h1 style="color: var(--primary); margin-top: 0;">₹ {prediction:,.2f}</h1>
+            <p style="color: var(--text-color);">Based on the information you provided</p>
         </div>
-    """.format(prediction), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     
     # Additional information with tabs
     tab1, tab2 = st.tabs(["📊 Understanding Your Quote", "💡 Ways to Save"])
@@ -230,10 +217,9 @@ if submitted:
 # Sidebar with additional information
 with st.sidebar:
     st.markdown("""
-        <div style="background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        <div style="background-color: var(--secondary-background-color);
                     padding: 1.5rem;
                     border-radius: 12px;
-                    color: white;
                     margin-bottom: 1.5rem;">
             <h3>About This Tool</h3>
             <p>Get instant health insurance estimates using our advanced predictive model.</p>
@@ -257,12 +243,12 @@ with st.sidebar:
         """)
     
     st.markdown("""
-        <div style="background-color: #fff3bf;
+        <div style="background-color: var(--secondary-background-color);
                     padding: 1rem;
                     border-radius: 8px;
-                    border-left: 4px solid #ffd43b;
+                    border-left: 4px solid var(--accent);
                     margin-top: 1.5rem;">
-            <p style="color: #5f3dc4; font-weight: 500;">
+            <p style="color: var(--text-color); font-weight: 500;">
                 ⚠️ Disclaimer: This is an estimate only. Actual premiums may vary.
             </p>
         </div>
