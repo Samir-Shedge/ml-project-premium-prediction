@@ -20,6 +20,6 @@ This project aims to predict healthcare insurance premiums using **Machine Learn
 3. Run the notebook to train and test the model  
 
 ## 🔹 Dataset  
-The dataset used is publicly available (mention source if applicable) and contains demographic and health-related information to estimate insurance premiums.  
+The dataset used is publicly available and contains demographic and health-related information to estimate insurance premiums.  
 
 🚀 **Contributions & feedback are welcome!**  
